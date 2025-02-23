@@ -10,7 +10,21 @@ st.sidebar.page_link(page="pages/about-data.py", label="About Data", icon="â„¹ï¸
 st.title("Keyword Search in German Notes")
 
 # Fix DtypeWarning: Read CSV safely and inspect types
-df_prep_notes_de = pd.read_csv("data/df_X_German_preprocessed.csv", low_memory=False)
+#df_prep_notes_de = pd.read_csv("data/df_X_German_preprocessed.csv", low_memory=False)
+
+# Google Drive File ID (replace with your actual file ID)
+file_id = "1edT0_Agv-HqZjMDQQykM7wNDOIA9h32N"  
+# Construct the direct download URL
+gdrive_url = f"https://drive.google.com/uc?id={file_id}"
+
+#df_prep_notes_de = pd.read_csv("data/df_X_German_preprocessed.csv", low_memory=False)
+
+# Read CSV from Google Drive
+@st.cache_data
+def load_data():
+    return pd.read_csv(gdrive_url, low_memory=False)
+
+df_prep_notes_de = load_data()
 
 # Check problematic columns and convert to strings
 cols_to_fix = ['col_5_name', 'col_6_name', 'col_7_name']  # Replace with actual column names
