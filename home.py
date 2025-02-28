@@ -19,7 +19,15 @@ st.title("Keyword Search in German Notes")
 def load_data():
     file_id = "1edT0_Agv-HqZjMDQQykM7wNDOIA9h32N"  
     gdrive_url = f"https://drive.google.com/uc?id={file_id}"
-    return pd.read_csv(gdrive_url, low_memory=False)
+
+    dtype_map = {
+        "noteId": "string",
+        "cleaned_summary": "string",
+        "summary": "string",
+        "date": "string"  # Will convert to datetime later
+    }
+
+    return pd.read_csv(gdrive_url, low_memory=False, dtype=dtype_map)
 
 df_prep_notes_de = load_data()
 
