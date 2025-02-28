@@ -53,7 +53,7 @@ if not filtered_df.empty:
 else:
     keyword_min_date = global_min_date  # If no data, default to global min
 
-# ---- TimeBar: Keep Full Range but Highlight Keyword's Data Range ----
+# ---- Bar: Keep Full Range but Highlight Keyword's Data Range ----
 st.subheader("Select Date Range")
 
 start_date, end_date = st.slider(
