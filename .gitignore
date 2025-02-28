@@ -1,10 +1,25 @@
-# ignore unnecessary files
-.vscode
-.DS_STORE
-.ipy*
-.py*
-.stre*
-node_modules/
+# Ignore system and editor-specific files
+.vscode/
+.DS_Store
 __pycache__/
 *.log
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore compiled Python files
+*.pyc
+*.pyo
+
+# Ignore virtual environments (uncomment if using a local venv)
+# venv/
+# .venv/
+
+# Ignore Node.js dependencies (if applicable)
+node_modules/
 dist/
+
+# Allow Streamlit & Python files
+!.streamlit/
+!.streamlit/config.toml
+!.py  # Ensure your Streamlit scripts are NOT ignored
