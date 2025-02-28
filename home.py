@@ -1,82 +1,133 @@
 import pandas as pd
 import streamlit as st
 import plotly.express as px
+import html  
 
-# Sidebar setup
-st.sidebar.page_link(page="home.py", label="Keyword Search", icon="🔍")
-st.sidebar.page_link(page="pages/about-data.py", label="About Data", icon="ℹ️")
+# ---- Set up Streamlit Layout ----
+st.set_page_config(page_title="Keyword Search", layout="wide")  # Optional: wide layout
 
-# Main title of the app
+# ---- Sidebar Setup ----
+st.sidebar.title("Navigation")
+st.sidebar.page_link(page="home.py", label="Keyword Search")
+st.sidebar.page_link(page="pages/about-data.py", label="About Data")
+
+# ---- Main Title ----
 st.title("Keyword Search in German Notes")
 
-# Fix DtypeWarning: Read CSV safely and inspect types
-#df_prep_notes_de = pd.read_csv("data/df_X_German_preprocessed.csv", low_memory=False)
-
-# Google Drive File ID (replace with your actual file ID)
-file_id = "1edT0_Agv-HqZjMDQQykM7wNDOIA9h32N"  
-# Construct the direct download URL
-gdrive_url = f"https://drive.google.com/uc?id={file_id}"
-
-#df_prep_notes_de = pd.read_csv("data/df_X_German_preprocessed.csv", low_memory=False)
-
-# Read CSV from Google Drive
+# ---- Load CSV Data ----
 @st.cache_data
 def load_data():
+    file_id = "1edT0_Agv-HqZjMDQQykM7wNDOIA9h32N"  
+    gdrive_url = f"https://drive.google.com/uc?id={file_id}"
     return pd.read_csv(gdrive_url, low_memory=False)
 
 df_prep_notes_de = load_data()
 
-# Check problematic columns and convert to strings
-cols_to_fix = ['col_5_name', 'col_6_name', 'col_7_name']  # Replace with actual column names
-for col in cols_to_fix:
-    if col in df_prep_notes_de.columns:
-        df_prep_notes_de[col] = df_prep_notes_de[col].astype(str)
+# Convert 'date' safely and drop NaT
+df_prep_notes_de['date'] = pd.to_datetime(df_prep_notes_de['date'], errors='coerce')
+df_prep_notes_de = df_prep_notes_de.dropna(subset=['date'])
 
-# Sidebar input for keyword search
+# ---- Sidebar input for keyword search ----
 keyword_searched = st.text_input(label='Type your keyword', value='twitter')
 
-# Placeholder for plot
-plot = st.empty()
+# ---- Filter Data Based on Keyword ----
+filtered_df = df_prep_notes_de[
+    df_prep_notes_de['cleaned_summary'].str.contains(keyword_searched, case=False, na=False)
+].copy()
 
-# If a keyword is entered, filter and display data
-if keyword_searched.strip():
-    # Fix SettingWithCopyWarning: Use .copy()
-    filtered_df = df_prep_notes_de[
-        df_prep_notes_de['cleaned_summary'].str.contains(keyword_searched, case=False, na=False)
-    ].copy()
+# ---- Determine Global Min & Max Date Across All Data ----
+global_min_date = df_prep_notes_de['date'].min().date()  # Earliest date in full dataset
+global_max_date = df_prep_notes_de['date'].max().date()  # Latest date in full dataset
 
-    # Convert 'date' safely, handle errors
-    filtered_df['date'] = pd.to_datetime(filtered_df['date'], errors='coerce')  
+# ---- Determine Min Date Based on the Selected Keyword ----
+if not filtered_df.empty:
+    keyword_min_date = filtered_df['date'].min().date()  # Earliest date when keyword appears
+else:
+    keyword_min_date = global_min_date  # If no data, default to global min
 
-    # Drop NaT (invalid dates)
-    filtered_df = filtered_df.dropna(subset=['date'])
+# ---- Sidebar: Keep Full Range but Highlight Keyword's Data Range ----
+st.sidebar.subheader("Select Date Range")
 
-    # Group by date and count occurrences
-    date_counts = filtered_df.groupby('date').size().reset_index(name="Number of Notes")
+start_date, end_date = st.sidebar.slider(
+    "Date Range",
+    min_value=global_min_date,  # Keep full dataset range visible
+    max_value=global_max_date,  # Allow full dataset range selection
+    value=(keyword_min_date, global_max_date),  # Highlight keyword's range
+    format="YYYY-MM-DD"
+)
 
-    # Plotly line chart with proper labels
+# Convert selected dates back to `datetime` for filtering
+start_date = pd.Timestamp(start_date)
+end_date = pd.Timestamp(end_date)
+
+# ---- Apply Date Range Filter ----
+filtered_df = filtered_df[(filtered_df['date'] >= start_date) & (filtered_df['date'] <= end_date)]
+
+# ---- Group by Date for Plot ----
+date_counts = filtered_df.groupby('date').size().reset_index(name="Number of Notes")
+
+# ---- Show Interactive Plot (First) ----
+st.subheader(f"Trend for '{keyword_searched}'")
+if not date_counts.empty:
     fig = px.line(
         date_counts, 
         x='date', 
         y='Number of Notes',
-        title=f"Notes per Date for keyword: '{keyword_searched}'",  # Fixed unterminated string issue
+        title=f"Notes per Date for keyword: '{keyword_searched}'",
         markers=True, 
-        height=400
+        height=400,
     )
-
-    # Update axes and layout
+    fig.update_layout(
+        autosize=True,  
+        width=None,  # Let Streamlit handle width
+        height=350,  # Reduce height for better balance
+        margin=dict(l=20, r=20, t=40, b=40),  # Adjust margins
+        title_x=0.5,
+        plot_bgcolor='white'
+    )
     fig.update_xaxes(title_text='Date', showgrid=True, gridwidth=1, gridcolor='lightgray')
     fig.update_yaxes(title_text='Number of Notes', showgrid=True, gridwidth=1, gridcolor='lightgray')
-    fig.update_layout(
-        showlegend=False, 
-        plot_bgcolor='white', 
-        title_x=0.5,  
-        title_font=dict(size=16, color='black'),
-        xaxis_title_font=dict(size=12, color='black'),
-        yaxis_title_font=dict(size=12, color='black')
-    )
-
-    # Display interactive Plotly chart
-    plot.plotly_chart(fig)
+    fig.update_layout(plot_bgcolor='white', title_x=0.5)
+    st.plotly_chart(fig)
 else:
-    st.write("Please enter a keyword in the textbar to search for it in the German notes. You have access to the preprocessed dataset at the moment where URLs are excluded.")
+    st.warning("No data found for the selected keyword and date range.")
+
+# ---- Rename Columns for Display & Fix Date Format ----
+display_df = filtered_df.rename(columns={'date': 'Date', 'summary': 'Note Content', 'noteId': 'Note ID'}).copy()
+
+# ---- Convert Large Note IDs to Strings to Avoid Precision Issues ----
+if 'Note ID' in display_df.columns:
+    display_df['Note ID'] = display_df['Note ID'].astype(str)
+
+# ---- Clean HTML entities in "Note Content" column ----
+display_df['Note Content'] = display_df['Note Content'].apply(html.unescape)
+
+# Convert "Date" column to string format YYYY-MM-DD
+display_df['Date'] = display_df['Date'].dt.strftime('%Y-%m-%d')
+
+# ---- Show Filtered Data Table (Below the Plot) ----
+st.subheader(f"Notes containing '{keyword_searched}' between {start_date.date()} and {end_date.date()}")
+st.markdown(
+    "Note that the search is done on preprocessed text (which contains changes like lemmatization and removal of URLs while the printed rows below are the original Community Notes with minor HTML display corrections."
+) 
+
+# ---- Show Total Number of Notes ----
+total_notes = len(display_df)
+st.subheader(f"Total Notes Found: {total_notes}")
+
+# ---- Display the Data Table Without the Index Column ----
+st.dataframe(display_df[['Note ID', 'Date', 'Note Content']], height=400, use_container_width=True)
+
+# ---- Add Download Button for CSV ----
+csv_data = display_df[['Note ID', 'Date', 'Note Content']].to_csv(index=False).encode('utf-8')
+
+st.download_button(
+    label="Download as CSV",
+    data=csv_data,
+    file_name=f"filtered_notes_{keyword_searched}.csv",
+    mime="text/csv",
+)
+
+# ---- Footer Message ----
+st.sidebar.markdown("---")
+st.sidebar.markdown('By [Notesense](https://github.com/Notesense/CommunityNotes) team.', unsafe_allow_html=True)
