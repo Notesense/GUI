@@ -4,3 +4,7 @@
 .ipy*
 .py*
 .stre*
+node_modules/
+__pycache__/
+*.log
+dist/
