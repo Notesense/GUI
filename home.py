@@ -24,7 +24,8 @@ def load_data():
         "noteId": "string",
         "cleaned_summary": "string",
         "summary": "string",
-        "date": "string"  # Will convert to datetime later
+        "date": "string",  # Will convert to datetime later
+        "tweetId": "string"
     }
 
     return pd.read_csv(gdrive_url, low_memory=False, dtype=dtype_map)
@@ -74,8 +75,7 @@ filtered_df = filtered_df[(filtered_df['date'] >= start_date) & (filtered_df['da
 # ---- Group by Date for Plot ----
 date_counts = filtered_df.groupby('date').size().reset_index(name="Number of Notes")
 
-# ---- Show Interactive Plot (First) ----
-st.subheader(f"Trend for '{keyword_searched}'")
+# ---- Show Interactive Plot (Centered & Responsive) ----
 if not date_counts.empty:
     fig = px.line(
         date_counts, 
@@ -83,25 +83,30 @@ if not date_counts.empty:
         y='Number of Notes',
         title=f"Notes per Date for keyword: '{keyword_searched}'",
         markers=True, 
-        height=400,
+        height=450,  # Keep a balanced height
+        width=1000,  # Make it longer horizontally
     )
     fig.update_layout(
-        autosize=True,  
-        width=None,  # Let Streamlit handle width
-        height=350,  # Reduce height for better balance
-        margin=dict(l=20, r=20, t=40, b=40),  # Adjust margins
-        title_x=0.5,
+        autosize=True,  # Allow automatic scaling
+        height=450,  
+        margin=dict(l=40, r=40, t=50, b=50),  # Balanced margins
+        title_x=0.5,  # Center title
         plot_bgcolor='white'
     )
     fig.update_xaxes(title_text='Date', showgrid=True, gridwidth=1, gridcolor='lightgray')
     fig.update_yaxes(title_text='Number of Notes', showgrid=True, gridwidth=1, gridcolor='lightgray')
-    fig.update_layout(plot_bgcolor='white', title_x=0.5)
-    st.plotly_chart(fig)
+
+    # ---- Centering with Responsive Layout ----
+    col1, col2, col3 = st.columns([0.5, 8, 0.5])  # Wider middle column for a longer plot
+    with col2:
+        with st.container():
+            st.plotly_chart(fig, use_container_width=True)  # Ensures responsiveness
+
 else:
     st.warning("No data found for the selected keyword and date range.")
 
 # ---- Rename Columns for Display & Fix Date Format ----
-display_df = filtered_df.rename(columns={'date': 'Date', 'summary': 'Note Content', 'noteId': 'Note ID'}).copy()
+display_df = filtered_df.rename(columns={'date': 'Date', 'summary': 'Note Content', 'noteId': 'Note ID', 'tweetId': 'Tweet ID'}).copy()
 
 # ---- Convert Large Note IDs to Strings to Avoid Precision Issues ----
 if 'Note ID' in display_df.columns:
@@ -110,13 +115,16 @@ if 'Note ID' in display_df.columns:
 # ---- Clean HTML entities in "Note Content" column ----
 display_df['Note Content'] = display_df['Note Content'].apply(html.unescape)
 
-# Convert "Date" column to string format YYYY-MM-DD
+# ---- Convert "Date" column to string format YYYY-MM-DD
 display_df['Date'] = display_df['Date'].dt.strftime('%Y-%m-%d')
+ 
+ # ---- Convert "Tweet ID" column to string format
+display_df['Tweet ID'] = display_df['Tweet ID'].astype(str)
 
 # ---- Show Filtered Data Table (Below the Plot) ----
 st.subheader(f"Notes containing '{keyword_searched}' between {start_date.date()} and {end_date.date()}")
 st.markdown(
-    "Note that the search is done on preprocessed text (which contains changes like lemmatization and removal of URLs while the printed rows below are the original Community Notes with minor HTML display corrections."
+    "Note that the search is done on preprocessed text (which contains changes like lemmatization and removal of URLs while the printed rows below are the original Community Notes with minor HTML display corrections.)"
 ) 
 
 # ---- Show Total Number of Notes ----
@@ -124,7 +132,7 @@ total_notes = len(display_df)
 st.subheader(f"Total Notes Found: {total_notes}")
 
 # ---- Display the Data Table Without the Index Column ----
-st.dataframe(display_df[['Note ID', 'Date', 'Note Content']], height=400, use_container_width=True)
+st.dataframe(display_df[['Note ID', 'Date', 'Note Content','Tweet ID']], height=400, use_container_width=True)
 
 # ---- Add Download Button for CSV ----
 csv_data = display_df[['Note ID', 'Date', 'Note Content']].to_csv(index=False).encode('utf-8')
