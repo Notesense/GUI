@@ -17,6 +17,8 @@ We are Hannah Doyal and Narges Chinichian, two data enthusiasts who believe that
 
 **Notesense** was born during our time at the Data Science Bootcamp at Spiced Academy—where late-night debugging sessions, endless coffee, and a passion for extracting insights turned into something useful (and hopefully, a little bit brilliant). <br><br>
 
+This project was developed in collaboration with the **SOHAM group** at **Trinity College Dublin**, led by **Prof. Taha Yasseri**. Their expertise and guidance were invaluable in shaping our work. <br><br>
+
 We built this tool because we love finding patterns in data and making complex things a little less complex. We hope you find it as handy as we do! <br><br>
 
 Want to see the code or contribute? Check out our work on [GitHub](https://github.com/Notesense/CommunityNotes). <br><br>
