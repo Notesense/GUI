@@ -23,8 +23,9 @@ st.title("Keyword Search in German Notes")
 # ---- Load CSV Data ----
 # German preprocessed notes data: 
 # https://drive.google.com/file/d/1tRkEstaVejJaeL_l6O0NU20jaQc9A2zW/view?usp=sharing
+
 # English preprocessed notes data:
-#https://drive.google.com/file/d/1ti9DKXx1bsR4LwoUOg3LHq2JehD0lZnN/view?usp=sharing
+# https://drive.google.com/file/d/1ti9DKXx1bsR4LwoUOg3LHq2JehD0lZnN/view?usp=sharing
 
 @st.cache_data
 def load_data():
