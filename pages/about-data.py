@@ -1,9 +1,9 @@
 import streamlit as st
 
 #change the name of tabs in the sidebar
-st.sidebar.page_link(page="home.py", label="Keyword Search", icon="🔍")
-#st.sidebar.page_link(page="pages/topics.py", label="Topic Search", icon="📊")
-st.sidebar.page_link(page="pages/about-data.py", label="About Data", icon="ℹ️")
+st.sidebar.page_link(page="home.py", label="Keyword Search")
+#st.sidebar.page_link(page="pages/topics.py", label="Topic Search")
+st.sidebar.page_link(page="pages/about-data.py", label="About Data")
 
 
 ## Show in webpage
