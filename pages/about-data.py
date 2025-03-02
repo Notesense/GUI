@@ -4,11 +4,11 @@ import streamlit as st
 st.sidebar.page_link(page="home.py", label="Keyword Search")
 #st.sidebar.page_link(page="pages/topics.py", label="Topic Search")
 st.sidebar.page_link(page="pages/about-data.py", label="About Data")
+st.sidebar.page_link(page="pages/about-us.py", label="About Us")
 
 
 ## Show in webpage
 st.header("About Data")
-import streamlit as st
 
 st.markdown("""
             

@@ -16,6 +16,7 @@ st.set_page_config(page_title="Keyword Search", layout="wide")  # Optional: wide
 st.sidebar.title("Navigation")
 st.sidebar.page_link(page="home.py", label="Keyword Search")
 st.sidebar.page_link(page="pages/about-data.py", label="About Data")
+st.sidebar.page_link(page="pages/about-us.py", label="About Us")
 
 # ---- Main Title ----
 st.title("Keyword Search in German Notes")
