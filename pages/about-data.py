@@ -1,9 +1,9 @@
 import streamlit as st
 
 #change the name of tabs in the sidebar
-st.sidebar.page_link(page="home.py", label="Keyword Search", icon="🔍")
-#st.sidebar.page_link(page="pages/topics.py", label="Topic Search", icon="📊")
-st.sidebar.page_link(page="pages/about-data.py", label="About Data", icon="ℹ️")
+st.sidebar.page_link(page="home.py", label="Keyword Search")
+#st.sidebar.page_link(page="pages/topics.py", label="Topic Search")
+st.sidebar.page_link(page="pages/about-data.py", label="About Data")
 
 
 ## Show in webpage
@@ -12,7 +12,7 @@ import streamlit as st
 
 st.markdown("""
             
-Last Updated: 15 February 2025 <br>
+Last Updated: 24 February 2025 <br>
 Data Source: X Community Notes, 2021-2025, available to public at: https://x.com/i/communitynotes/download-data <br>
 
  ### Introduction

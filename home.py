@@ -2,6 +2,12 @@ import pandas as pd
 import streamlit as st
 import plotly.express as px
 import html  
+import base64
+
+# Define the function to access logo
+def get_base64_image(image_path):
+    with open(image_path, "rb") as img_file:
+        return base64.b64encode(img_file.read()).decode()
 
 # ---- Set up Streamlit Layout ----
 st.set_page_config(page_title="Keyword Search", layout="wide")  # Optional: wide layout
@@ -15,9 +21,15 @@ st.sidebar.page_link(page="pages/about-data.py", label="About Data")
 st.title("Keyword Search in German Notes")
 
 # ---- Load CSV Data ----
+# German preprocessed notes data: 
+# https://drive.google.com/file/d/1tRkEstaVejJaeL_l6O0NU20jaQc9A2zW/view?usp=sharing
+
+# English preprocessed notes data:
+# https://drive.google.com/file/d/1ti9DKXx1bsR4LwoUOg3LHq2JehD0lZnN/view?usp=sharing
+
 @st.cache_data
 def load_data():
-    file_id = "1edT0_Agv-HqZjMDQQykM7wNDOIA9h32N"  
+    file_id = "1tRkEstaVejJaeL_l6O0NU20jaQc9A2zW"  
     gdrive_url = f"https://drive.google.com/uc?id={file_id}"
 
     dtype_map = {
@@ -30,7 +42,10 @@ def load_data():
 
     return pd.read_csv(gdrive_url, low_memory=False, dtype=dtype_map)
 
-df_prep_notes_de = load_data()
+with st.spinner("Loading data... Please wait ⏳"):
+    df_prep_notes_de = load_data()
+# st.success("Data successfully loaded! 🎉")
+
 
 # Convert 'date' safely and drop NaT
 df_prep_notes_de['date'] = pd.to_datetime(df_prep_notes_de['date'], errors='coerce')
@@ -147,3 +162,33 @@ st.download_button(
 # ---- Footer Message ----
 st.sidebar.markdown("---")
 st.sidebar.markdown('By [Notesense](https://github.com/Notesense/CommunityNotes) team.', unsafe_allow_html=True)
+# ---- Add the logo at the bottom of the sidebar ----
+logo_path = "data/NotesenseLogo.png"  # Adjust the path if needed
+logo_base64 = get_base64_image(logo_path)
+
+st.sidebar.markdown(
+    f"""
+    <style>
+        /* Ensure sidebar content fills space and aligns the logo at the bottom */
+        .sidebar-content {{
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            justify-content: space-between;
+        }}
+
+        /* Center the logo */
+        .sidebar-footer {{
+            text-align: center;
+            padding-bottom: 10px;
+        }}
+    </style>
+    
+    <div class="sidebar-content">
+        <div class="sidebar-footer">
+            <img src="data:image/png;base64,{logo_base64}" width="50">
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
