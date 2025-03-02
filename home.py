@@ -150,7 +150,7 @@ st.subheader(f"Total Notes Found: {total_notes}")
 st.dataframe(display_df[['Note ID', 'Date', 'Note Content','Tweet ID']], height=400, use_container_width=True)
 
 # ---- Add Download Button for CSV ----
-csv_data = display_df[['Note ID', 'Date', 'Note Content']].to_csv(index=False).encode('utf-8')
+csv_data = display_df[['Note ID', 'Date', 'Note Content', 'Tweet ID']].to_csv(index=False).encode('utf-8')
 
 st.download_button(
     label="Download as CSV",
