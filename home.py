@@ -21,10 +21,14 @@ st.sidebar.page_link(page="pages/about-data.py", label="About Data")
 st.title("Keyword Search in German Notes")
 
 # ---- Load CSV Data ----
+# German preprocessed notes data: 
+# https://drive.google.com/file/d/1tRkEstaVejJaeL_l6O0NU20jaQc9A2zW/view?usp=sharing
+# English preprocessed notes data:
+#https://drive.google.com/file/d/1ti9DKXx1bsR4LwoUOg3LHq2JehD0lZnN/view?usp=sharing
 
 @st.cache_data
 def load_data():
-    file_id = "1edT0_Agv-HqZjMDQQykM7wNDOIA9h32N"  
+    file_id = "1tRkEstaVejJaeL_l6O0NU20jaQc9A2zW"  
     gdrive_url = f"https://drive.google.com/uc?id={file_id}"
 
     dtype_map = {
