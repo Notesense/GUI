@@ -13,7 +13,7 @@ __pycache__/
 
 # Ignore virtual environments (uncomment if using a local venv)
 # venv/
-# .venv/
+.venv/
 
 # Ignore Node.js dependencies (if applicable)
 node_modules/
