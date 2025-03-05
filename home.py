@@ -164,7 +164,7 @@ st.download_button(
 st.sidebar.markdown("---")
 st.sidebar.markdown('By [Notesense](https://github.com/Notesense/CommunityNotes) team.', unsafe_allow_html=True)
 # ---- Add the logo at the bottom of the sidebar ----
-logo_path = "data/NotesenseLogo.png"  # Adjust the path if needed
+logo_path = "NotesenseLogo.png"  # Adjust the path if needed
 logo_base64 = get_base64_image(logo_path)
 
 st.sidebar.markdown(
