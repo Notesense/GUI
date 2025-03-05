@@ -1,23 +1,17 @@
 import streamlit as st
 import requests
-
-#change the name of tabs in the sidebar
-st.sidebar.page_link(page="home.py", label="Keyword Search")
-#st.sidebar.page_link(page="pages/topics.py", label="Topic Search")
-st.sidebar.page_link(page="pages/about-data.py", label="About Data")
-st.sidebar.page_link(page="pages/about-us.py", label="About Us")
-
-
+from pages.sidebar import load_sidebar  # Import the sidebar function
+load_sidebar()
 
 ## Show in webpage
 st.header("About Us")
 
 st.markdown("""
-We are Hannah Doyal and Narges Chinichian, two data enthusiasts who believe that making sense of information should be as easy as a well-structured dataset. <br><br>
+We are [Hannah Doyal](https://www.linkedin.com/in/hannah-doyal ) and [Narges Chinichian](https://www.linkedin.com/in/narges-chinichian-phd-39583195), two data enthusiasts who believe that making sense of information should be as easy as a well-structured dataset. <br><br>
 
 **Notesense** was born during our time at the Data Science Bootcamp at Spiced Academy—where late-night debugging sessions, endless coffee, and a passion for extracting insights turned into something useful (and hopefully, a little bit brilliant). <br><br>
 
-This project was developed in collaboration with the **SOHAM group** at **Trinity College Dublin**, led by **Prof. Taha Yasseri**. Their expertise and guidance were invaluable in shaping our work. <br><br>
+This project was developed in collaboration with the [**SOHAM group**](https://tahayasseri.com/) at **Trinity College Dublin**, led by **Prof. Taha Yasseri**. Their expertise and guidance were invaluable in shaping our work. <br><br>
 
 We built this tool because we love finding patterns in data and making complex things a little less complex. We hope you find it as handy as we do! <br><br>
 

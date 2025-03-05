@@ -1,10 +1,3 @@
-# ---- Load CSV Data ----
-# German preprocessed notes data: 
-# https://drive.google.com/file/d/1tRkEstaVejJaeL_l6O0NU20jaQc9A2zW/view?usp=sharing
-
-# English preprocessed notes data:
-# https://drive.google.com/file/d/1ti9DKXx1bsR4LwoUOg3LHq2JehD0lZnN/view?usp=sharing
-
 import pandas as pd
 import streamlit as st
 import plotly.express as px
@@ -12,9 +5,7 @@ import html
 import base64
 import mariadb
 import sys
-import time
 from pages.sidebar import load_sidebar  # Import the sidebar function
-
 
 
 def create_connection():
@@ -35,13 +26,11 @@ def create_connection():
         print(f"Error connecting to MariaDB Platform: {e}")
         return None
 
-
 # ---- Set up Streamlit Layout ----
 st.set_page_config(page_title="Keyword Search", layout="wide")  # Optional: wide layout
 
-
 # ---- Main Title ----
-st.title("Keyword Search in English Notes")
+st.title("Keyword Search in German Notes")
 
 load_sidebar()
 
@@ -49,12 +38,11 @@ with st.spinner("Connecting to Database..."):
     conn = create_connection()
     cursor = conn.cursor()
 
+
 # Execute the query to get the oldest and newest dates
-with st.spinner("Fetching Data..."):
-    cursor.execute("SELECT MIN(date), MAX(date) FROM df_X_Eng_preprocessed")
+with st.spinner("Fetching Data..."):  
+    cursor.execute("SELECT MIN(date), MAX(date) FROM df_X_German_preprocessed")
     global_min_date, global_max_date = cursor.fetchone()
-
-
 
 # Convert to datetime and format as YYYY-MM-DD
 global_min_date = pd.to_datetime(global_min_date).strftime('%Y-%m-%d')
@@ -72,26 +60,23 @@ keyword_searched = st.text_input(label='Type your keyword', value='birdwatch')
 
 
 # query: find the minium and maximum date in the dataset where 'cleaned_summary' contains the keyword
-
-startTime = time.time()
-query = """
-    SELECT MIN(date), MAX(date)
-    FROM df_X_Eng_preprocessed 
-    WHERE cleaned_summary LIKE %s
-"""
+query= f"SELECT MIN(date), MAX(date) FROM df_X_German_preprocessed WHERE cleaned_summary LIKE '%{keyword_searched}%'"
 with st.spinner("Fetching Data..."):
-    cursor.execute(query, (f"%{keyword_searched}%",))
+    cursor.execute(query)
     keyword_min_date, keyword_max_date = cursor.fetchone()
 
-
+# print(keyword_min_date,keyword_max_date)
 if(keyword_min_date == None):
     keyword_min_date = global_min_date
 else:
     keyword_min_date = pd.to_datetime(keyword_min_date).date()
+
 if(keyword_max_date == None):
     keyword_max_date = global_max_date
 else:
     keyword_max_date = pd.to_datetime(keyword_max_date).date()
+
+# print(keyword_min_date,keyword_max_date)
 
 
 
@@ -108,7 +93,7 @@ start_date, end_date = st.slider(
 
 
 
-query = f"SELECT date, COUNT(*) FROM df_X_Eng_preprocessed WHERE cleaned_summary LIKE '%{keyword_searched}%' AND date >= '{start_date}' AND date <= '{end_date}' GROUP BY date"
+query = f"SELECT date, COUNT(*) FROM df_X_German_preprocessed WHERE cleaned_summary LIKE '%{keyword_searched}%' AND date >= '{start_date}' AND date <= '{end_date}' GROUP BY date"
 with st.spinner("Fetching Data..."):
     cursor.execute(query)
     data_counts = pd.DataFrame(cursor.fetchall(), columns=['Date', 'Number of Notes'])
@@ -138,17 +123,16 @@ if not len(data_counts) == 0:
     col1, col2, col3 = st.columns([0.5, 8, 0.5])  # Wider middle column for a longer plot
     with col2:
         with st.container():
-            plotlyData=st.plotly_chart(fig, use_container_width=True)  # Ensures responsiveness
+            st.plotly_chart(fig, use_container_width=True)  # Ensures responsiveness
 
 else:
     st.warning("No data found for the selected keyword and date range.")
 
-# ---- Rename Columns for Display & Fix Date Format ----
-query = f"SELECT CAST(noteID AS CHAR),date,summary,tweetId FROM df_X_Eng_preprocessed WHERE cleaned_summary LIKE '%{keyword_searched}%' AND date >= '{start_date}' AND date <= '{end_date}' ORDER BY date"
-
+query = f"SELECT CAST(noteID AS CHAR),date,summary,tweetId FROM df_X_German_preprocessed WHERE cleaned_summary LIKE '%{keyword_searched}%' AND date >= '{start_date}' AND date <= '{end_date}' ORDER BY date"
 with st.spinner("Fetching Data..."):
     cursor.execute(query)
     display_df = cursor.fetchall()
+
 
 # add headers
 headers = ['Note ID', 'Date', 'Note Content', 'Tweet ID']
@@ -164,13 +148,15 @@ st.markdown(
 # ---- Show Total Number of Notes ----
 total_notes = len(display_df)
 st.subheader(f"Total Notes Found: {total_notes}")
-
 # Reset index to remove the index column from display
 display_df = display_df.reset_index(drop=True)
+
 # add column Tweet URL that gets created from Tweet ID in the form of https://twitter.com/notesense/status/{tweet_id}
 display_df['Tweet URL'] = 'https://twitter.com/notesense/status/' + display_df['Tweet ID'].astype(str)
+
 # ---- Display the Data Table Without the Index Column ----
 st.dataframe(display_df[['Note ID', 'Date', 'Note Content','Tweet ID','Tweet URL']], height=400, use_container_width=True)
+
 
 # ---- Add Download Button for CSV ----
 
