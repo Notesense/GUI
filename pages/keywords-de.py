@@ -55,7 +55,7 @@ global_max_date = pd.to_datetime(global_max_date).date()
 
 
 # ---- Sidebar input for keyword search ----
-keyword_searched = st.text_input(label='Type your keyword', value='birdwatch')
+keyword_searched = st.text_input(label='Type your keyword', value='twitter')
 
 
 
