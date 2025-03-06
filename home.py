@@ -8,11 +8,6 @@
 import pandas as pd
 import streamlit as st
 import plotly.express as px
-import html  
-import base64
-import os
-#os.system("pip install mariadb")
-import sys
 import time
 from pages.sidebar import load_sidebar  # Import the sidebar function
 import pymysql
@@ -74,13 +69,13 @@ keyword_searched = st.text_input(label='Type your keyword', value='birdwatch')
 
 
 
-# query: find the minium and maximum date in the dataset where 'cleaned_summary' contains the keyword
+# query: find the minium and maximum date in the dataset where 'summary' contains the keyword
 
 startTime = time.time()
 query = """
     SELECT MIN(date), MAX(date)
     FROM df_X_Eng_preprocessed 
-    WHERE cleaned_summary LIKE %s
+    WHERE summary LIKE %s
 """
 with st.spinner("Fetching Data..."):
     cursor.execute(query, (f"%{keyword_searched}%",))
@@ -111,7 +106,7 @@ start_date, end_date = st.slider(
 
 
 
-query = f"SELECT date, COUNT(*) FROM df_X_Eng_preprocessed WHERE cleaned_summary LIKE '%{keyword_searched}%' AND date >= '{start_date}' AND date <= '{end_date}' GROUP BY date"
+query = f"SELECT date, COUNT(*) FROM df_X_Eng_preprocessed WHERE summary LIKE '%{keyword_searched}%' AND date >= '{start_date}' AND date <= '{end_date}' GROUP BY date"
 with st.spinner("Fetching Data..."):
     cursor.execute(query)
     data_counts = pd.DataFrame(cursor.fetchall(), columns=['Date', 'Number of Notes'])
@@ -147,7 +142,7 @@ else:
     st.warning("No data found for the selected keyword and date range.")
 
 # ---- Rename Columns for Display & Fix Date Format ----
-query = f"SELECT CAST(noteID AS CHAR),date,summary,tweetId FROM df_X_Eng_preprocessed WHERE cleaned_summary LIKE '%{keyword_searched}%' AND date >= '{start_date}' AND date <= '{end_date}' ORDER BY date"
+query = f"SELECT CAST(noteID AS CHAR),date,summary,tweetId FROM df_X_Eng_preprocessed WHERE summary LIKE '%{keyword_searched}%' AND date >= '{start_date}' AND date <= '{end_date}' ORDER BY date"
 
 with st.spinner("Fetching Data..."):
     cursor.execute(query)
