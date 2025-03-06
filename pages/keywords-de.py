@@ -47,12 +47,27 @@ with st.spinner("Fetching Data..."):
     global_min_date, global_max_date = cursor.fetchone()
 
 # Convert to datetime and format as YYYY-MM-DD
-global_min_date = pd.to_datetime(global_min_date).strftime('%Y-%m-%d')
-global_max_date = pd.to_datetime(global_max_date).strftime('%Y-%m-%d')
-# convert to datetime.date
-global_min_date = pd.to_datetime(global_min_date).date()
-global_max_date = pd.to_datetime(global_max_date).date()
+# global_min_date = pd.to_datetime(global_min_date).strftime('%Y-%m-%d')
+# global_max_date = pd.to_datetime(global_max_date).strftime('%Y-%m-%d')
+# # convert to datetime.date
+# global_min_date = pd.to_datetime(global_min_date).date()
+# global_max_date = pd.to_datetime(global_max_date).date()
+# Check if the date is valid before conversion
+try:
+    if isinstance(global_min_date, str) and global_min_date.lower().startswith("min"):
+        raise ValueError("Invalid date: MIN(date) found")
 
+    global_min_date = pd.to_datetime(global_min_date).strftime('%Y-%m-%d')
+    global_max_date = pd.to_datetime(global_max_date).strftime('%Y-%m-%d')
+
+    # Convert to datetime.date if needed
+    global_min_date = pd.to_datetime(global_min_date).date()
+    global_max_date = pd.to_datetime(global_max_date).date()
+
+except ValueError as e:
+    print(f"Date conversion error: {e}")
+    global_min_date = None  # Set a default value or handle the error
+    global_max_date = None
 
 
 
