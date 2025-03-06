@@ -4,8 +4,9 @@
 __pycache__/
 *.log
 
-# Ignore Jupyter Notebook checkpoints
+# Ignore Jupyter Notebooks checkpoints and Jupyter Notebook fully
 .ipynb_checkpoints/
+*.ipynb
 
 # Ignore compiled Python files
 *.pyc
