@@ -6,6 +6,8 @@ def load_sidebar():
     st.sidebar.title("Menu")
     st.sidebar.page_link(page="home.py", label="Keyword Search English")
     st.sidebar.page_link(page="pages/keywords-de.py", label="Keyword Search German")
+    st.sidebar.page_link(page="pages/topics_en.py", label="Topics Network English")
+    st.sidebar.page_link(page="pages/topics_de.py", label="Topics Network German")
     st.sidebar.page_link(page="pages/about-data.py", label="About Data")
     st.sidebar.page_link(page="pages/about-us.py", label="About Us")
 
