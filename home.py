@@ -16,8 +16,11 @@ import mariadb
 import sys
 import time
 from pages.sidebar import load_sidebar  # Import the sidebar function
+import pymysql
 
 
+
+import pymysql
 
 def create_connection():
     try:
@@ -26,16 +29,19 @@ def create_connection():
         user = "communitynotes"
         password = "noted"
         database = "communitynotes"
-        return mariadb.connect(
-            user=user,
-            password=password,
+        
+        return pymysql.connect(
             host=host,
             port=port,
-            database=database
+            user=user,
+            password=password,
+            database=database,
+            cursorclass=pymysql.cursors.DictCursor  # Returns results as dictionaries
         )
-    except mariadb.Error as e:
-        print(f"Error connecting to MariaDB Platform: {e}")
+    except pymysql.MySQLError as e:
+        print(f"Error connecting to MySQL/MariaDB: {e}")
         return None
+
 
 
 # ---- Set up Streamlit Layout ----
