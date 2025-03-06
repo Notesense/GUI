@@ -18,9 +18,6 @@ from pages.sidebar import load_sidebar  # Import the sidebar function
 import pymysql
 
 
-
-import pymysql
-
 def create_connection():
     try:
         host = "communitynotes.c3ui44m26pgw.eu-west-1.rds.amazonaws.com"
