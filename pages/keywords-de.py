@@ -59,8 +59,8 @@ keyword_searched = st.text_input(label='Type your keyword', value='twitter')
 
 
 
-# query: find the minium and maximum date in the dataset where 'cleaned_summary' contains the keyword
-query= f"SELECT MIN(date), MAX(date) FROM df_X_German_preprocessed WHERE cleaned_summary LIKE '%{keyword_searched}%'"
+# query: find the minium and maximum date in the dataset where 'summary' contains the keyword
+query= f"SELECT MIN(date), MAX(date) FROM df_X_German_preprocessed WHERE summary LIKE '%{keyword_searched}%'"
 with st.spinner("Fetching Data..."):
     cursor.execute(query)
     keyword_min_date, keyword_max_date = cursor.fetchone()
@@ -93,7 +93,7 @@ start_date, end_date = st.slider(
 
 
 
-query = f"SELECT date, COUNT(*) FROM df_X_German_preprocessed WHERE cleaned_summary LIKE '%{keyword_searched}%' AND date >= '{start_date}' AND date <= '{end_date}' GROUP BY date"
+query = f"SELECT date, COUNT(*) FROM df_X_German_preprocessed WHERE summary LIKE '%{keyword_searched}%' AND date >= '{start_date}' AND date <= '{end_date}' GROUP BY date"
 with st.spinner("Fetching Data..."):
     cursor.execute(query)
     data_counts = pd.DataFrame(cursor.fetchall(), columns=['Date', 'Number of Notes'])
@@ -128,7 +128,7 @@ if not len(data_counts) == 0:
 else:
     st.warning("No data found for the selected keyword and date range.")
 
-query = f"SELECT CAST(noteID AS CHAR),date,summary,tweetId FROM df_X_German_preprocessed WHERE cleaned_summary LIKE '%{keyword_searched}%' AND date >= '{start_date}' AND date <= '{end_date}' ORDER BY date"
+query = f"SELECT CAST(noteID AS CHAR),date,summary,tweetId FROM df_X_German_preprocessed WHERE summary LIKE '%{keyword_searched}%' AND date >= '{start_date}' AND date <= '{end_date}' ORDER BY date"
 with st.spinner("Fetching Data..."):
     cursor.execute(query)
     display_df = cursor.fetchall()
