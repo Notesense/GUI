@@ -34,8 +34,7 @@ def create_connection():
             port=port,
             user=user,
             password=password,
-            database=database,
-            cursorclass=pymysql.cursors.DictCursor  # Returns results as dictionaries
+            database=database        
         )
     except pymysql.MySQLError as e:
         print(f"Error connecting to MySQL/MariaDB: {e}")
