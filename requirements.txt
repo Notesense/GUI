@@ -1,6 +1,7 @@
 pymysql
 mysql-connector-python
 graphviz
+pygraphviz
 altair==5.2.0
 appnope==0.1.4
 asttokens==2.4.1
