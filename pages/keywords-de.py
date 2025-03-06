@@ -53,6 +53,7 @@ with st.spinner("Fetching Data..."):
 # global_min_date = pd.to_datetime(global_min_date).date()
 # global_max_date = pd.to_datetime(global_max_date).date()
 # Check if the date is valid before conversion
+print(global_min_date,global_min_date.type)
 try:
     if isinstance(global_min_date, str) and global_min_date.lower().startswith("min"):
         raise ValueError("Invalid date: MIN(date) found")
