@@ -1,3 +1,4 @@
+mariadb
 pymysql
 mysql-connector-python
 graphviz
