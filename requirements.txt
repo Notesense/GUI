@@ -1,5 +1,3 @@
---find-links=./wheels
-mariadb
 pymysql
 mysql-connector-python
 graphviz
