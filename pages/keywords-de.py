@@ -1,9 +1,6 @@
 import pandas as pd
 import streamlit as st
 import plotly.express as px
-import html  
-import base64
-import sys
 import pymysql
 from pages.sidebar import load_sidebar  # Import the sidebar function
 
