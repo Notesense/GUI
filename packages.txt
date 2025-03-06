@@ -1,3 +1,4 @@
 libmariadb-dev
 graphviz
-pygraphviz
+libgraphviz-dev
+
