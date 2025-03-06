@@ -12,7 +12,6 @@ import html
 import base64
 import os
 os.system("pip install mariadb")
-import mariadb
 import sys
 import time
 from pages.sidebar import load_sidebar  # Import the sidebar function
