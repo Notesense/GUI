@@ -47,14 +47,13 @@ with st.spinner("Fetching Data..."):
     cursor.execute("SELECT MIN(date), MAX(date) FROM df_X_German_preprocessed")
     global_min_date, global_max_date = cursor.fetchone()
 
-Convert to datetime and format as YYYY-MM-DD
+# Convert to datetime and format as YYYY-MM-DD
 global_min_date = pd.to_datetime(global_min_date).strftime('%Y-%m-%d')
 global_max_date = pd.to_datetime(global_max_date).strftime('%Y-%m-%d')
 # convert to datetime.date
 global_min_date = pd.to_datetime(global_min_date).date()
 global_max_date = pd.to_datetime(global_max_date).date()
-# Check if the date is valid before conversion
-print(global_min_date)
+
 
 # ---- Sidebar input for keyword search ----
 keyword_searched = st.text_input(label='Type your keyword', value='birdwatch')
