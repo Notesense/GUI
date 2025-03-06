@@ -53,6 +53,7 @@ global_max_date = pd.to_datetime(global_max_date).date()
 
 # ---- Sidebar input for keyword search ----
 keyword_searched = st.text_input(label='Type your keyword', value='twitter')
+st.markdown("Note: If you want the string you type to be an isolated word, type an empty space before and after your keyword.")
 
 
 
@@ -138,9 +139,7 @@ display_df = pd.DataFrame(display_df, columns=headers, index=None)
 
 # ---- Show Filtered Data Table (Below the Plot) ----
 st.subheader(f"Notes containing '{keyword_searched}' between {start_date} and {end_date}")
-st.markdown(
-    "Note that the search is done on preprocessed text (which contains changes like lemmatization and removal of URLs while the printed rows below are the original Community Notes with minor HTML display corrections.)"
-) 
+
 
 # ---- Show Total Number of Notes ----
 total_notes = len(display_df)
