@@ -8,7 +8,7 @@ st.header("Topics Network")
 
 load_sidebar()
 # Display the Dash app using an iframe
-st.components.v1.iframe("https://dashrepository.onrender.com/", height=700, scrolling=True)
+st.components.v1.iframe("https://network-vis.onrender.com/", height=700, scrolling=True)
 
 
 
