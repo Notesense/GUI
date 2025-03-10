@@ -1,5 +1,10 @@
 import streamlit as st
 from pages.sidebar import load_sidebar  # Import the sidebar function
+import uuid
+
+# Unique session key to prevent conflicts
+if "session_id" not in st.session_state:
+    st.session_state["session_id"] = str(uuid.uuid4())
 
 # Improved iframe display with dynamic height, width, and styling
 st.markdown(
