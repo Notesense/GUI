@@ -3,7 +3,7 @@ import base64
 
 # Define a function to load the sidebar
 def load_sidebar():
-    st.sidebar.title("Menu")
+    st.sidebar.title("Notesense Project")
     st.sidebar.page_link(page="home.py", label="Keyword Search English")
     st.sidebar.page_link(page="pages/keywords-de.py", label="Keyword Search German")
     st.sidebar.page_link(page="pages/topics_en.py", label="Topics Network English")
