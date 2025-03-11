@@ -4,8 +4,9 @@ import base64
 # Define a function to load the sidebar
 def load_sidebar():
     st.sidebar.title("Notesense Project")
-    st.sidebar.page_link(page="home.py", label="Keyword Search English")
-    st.sidebar.page_link(page="pages/keywords-de.py", label="Keyword Search German")
+    st.sidebar.page_link(page="home.py", label="Keyword Search")
+    #st.sidebar.page_link(page="pages/keywords-de.py", label="Keyword Search German")
+   # st.sidebar.page_link(page="pages/keywords-en.py", label="Keyword Search English")
     st.sidebar.page_link(page="pages/topics_en.py", label="Topics Network English")
     st.sidebar.page_link(page="pages/topics_de.py", label="Topics Network German")
     st.sidebar.page_link(page="pages/about-data.py", label="About Data")
@@ -13,7 +14,7 @@ def load_sidebar():
 
     # ---- Footer Message ----
     st.sidebar.markdown("---")
-    st.sidebar.markdown('By [Notesense](https://github.com/Notesense/CommunityNotes) team.', unsafe_allow_html=True)
+    st.sidebar.markdown('By [Notesense](https://github.com/Notesense) team.', unsafe_allow_html=True)
 
     # ---- Add the logo at the bottom of the sidebar ----
     logo_path = "NotesenseLogo.png"  # Adjust the path if needed
