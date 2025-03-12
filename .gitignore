@@ -27,3 +27,6 @@ dist/
 !.streamlit/
 !.streamlit/config.toml
 !.py  # Ensure your Streamlit scripts are NOT ignored
+
+# But
+.streamlit/secrets.toml

@@ -28,7 +28,7 @@ st.download_button(
 )
 
 # Load the HTML content
-with open("data/barchart.html", "r") as f:
+with open("data/barchart_de.html", "r") as f:
     html_content = f.read()
 
 # Wrap the HTML content with a responsive `<div>`
