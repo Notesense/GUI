@@ -9,7 +9,7 @@ def create_connection():
     try:
         return pymysql.connect(
             host=st.secrets["database"]["host"],
-            port=st.secrets["database"]["port"],
+            port=int(st.secrets["database"]["port"]),
             user=st.secrets["database"]["user"],
             password=st.secrets["database"]["password"],
             database=st.secrets["database"]["database"]
