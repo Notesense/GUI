@@ -5,20 +5,19 @@ import pymysql
 import html
 from pages.sidebar import load_sidebar
 
-
-# ---- Optimized Connection Function ----
 def create_connection():
     try:
         return pymysql.connect(
-            host="communitynotes.c3ui44m26pgw.eu-west-1.rds.amazonaws.com",
-            port=3306,
-            user="communitynotes",
-            password="noted",
-            database="communitynotes"
+            host=st.secrets["database"]["host"],
+            port=st.secrets["database"]["port"],
+            user=st.secrets["database"]["user"],
+            password=st.secrets["database"]["password"],
+            database=st.secrets["database"]["database"]
         )
     except pymysql.MySQLError as e:
         st.error(f"Error connecting to MySQL/MariaDB: {e}")
         return None
+
 
 # ---- Streamlit Layout ----
 st.set_page_config(page_title="Keyword Search", layout="wide")
