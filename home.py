@@ -5,11 +5,17 @@ import pymysql
 import html
 from pages.sidebar import load_sidebar
 
+
+# ---- Streamlit Layout ----
+st.set_page_config(page_title="Keyword Search", layout="wide")
+st.title("Keyword Search in Community Notes")
+load_sidebar()
+
 def create_connection():
     try:
         return pymysql.connect(
             host=st.secrets["database"]["host"],
-            port=int(st.secrets["database"]["port"]),
+            port=st.secrets["database"]["port"],
             user=st.secrets["database"]["user"],
             password=st.secrets["database"]["password"],
             database=st.secrets["database"]["database"]
@@ -18,11 +24,6 @@ def create_connection():
         st.error(f"Error connecting to MySQL/MariaDB: {e}")
         return None
 
-
-# ---- Streamlit Layout ----
-st.set_page_config(page_title="Keyword Search", layout="wide")
-st.title("Keyword Search in Community Notes")
-load_sidebar()
 
 # ---- Sidebar for Language Selection ----
 language = st.radio("Language", ["English", "German"],index=1, horizontal=True)
