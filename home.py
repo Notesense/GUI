@@ -45,7 +45,7 @@ def fetch_dates_and_keyword_range(keyword, table_name):
            pd.to_datetime(keyword_min_date).date(), pd.to_datetime(keyword_max_date).date()
 
 # ---- Keyword Search ----
-keyword_searched = st.text_input(label='Type your keyword', value='twitter')
+keyword_searched = st.text_input(label='Type your keyword', value='Musk')
 st.markdown("Note: Add spaces before/after the keyword for exact word matches.")
 
 # ---- Fetch Data from Cache ----
