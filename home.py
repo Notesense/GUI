@@ -27,12 +27,11 @@ table_name = "Eng-lean" if "English" in language else "German-lean"
 def fetch_dates_and_keyword_range(keyword, table_name):
     response = supabase.table(table_name) \
         .select("date, summary") \
-        #.filter("summary", "ilike", f"%{keyword}%") \
         .filter("summary", "ilike", f"{keyword}") \ # no wildcards for efficiency
         .execute()
 
     df = pd.DataFrame(response.data)
-    
+#I changed the filtering condition for faster search.It was .filter("summary", "ilike", f"%{keyword}%") \   
     if df.empty:
         return None, None, None, None
 
