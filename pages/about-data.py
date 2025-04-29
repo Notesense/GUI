@@ -6,7 +6,7 @@ st.header("About Data")
 
 st.markdown("""
             
-Last Update of the Dataset: 24 February 2025 <br>
+Last Date of the Dataset: 23 Jan 2025 <br>
 Data Source: X Community Notes, 2021-2025, available to public at: https://x.com/i/communitynotes/download-data <br>
 
  ### Introduction
